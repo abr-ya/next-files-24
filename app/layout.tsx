@@ -15,7 +15,7 @@ const RootLayout = ({ children }: PropsWithChildren) => (
   <html lang="en">
     <body className={inter.className}>
       <Header />
-      <main className="flex min-h-[calc(100vh-275px)] flex-col items-center justify-between p-4">{children}</main>
+      <main className="flex min-h-[calc(100vh-275px)] flex-col items-center p-4">{children}</main>
       <Footer />
     </body>
   </html>

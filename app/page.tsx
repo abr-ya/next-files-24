@@ -1,10 +1,10 @@
 "use client";
 
+import { useMutation, useQuery } from "convex/react";
+import { useSession } from "@clerk/nextjs";
+
 import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
-import { useSession } from "@clerk/nextjs";
-import { useMutation, useQuery } from "convex/react";
-import { LoginLogoutButton } from "./_components";
 
 const Home = () => {
   const { isLoaded, session } = useSession(); // isSignedIn
@@ -30,8 +30,6 @@ const Home = () => {
   return (
     <>
       <h1 className="text-2xl">{renderHello()}</h1>
-
-      <LoginLogoutButton />
 
       {allFiles?.map(({ _id: id, name }) => <div key={id}>file: {name}</div>)}
 

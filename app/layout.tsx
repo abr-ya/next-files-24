@@ -17,7 +17,7 @@ const RootLayout = ({ children }: PropsWithChildren) => (
     <body className={inter.className}>
       <ConvexClerkProvider>
         <Header />
-        <main className="flex min-h-[calc(100vh-275px)] flex-col items-center p-4">{children}</main>
+        <main className="flex min-h-[calc(100vh-260px)] flex-col items-center p-4">{children}</main>
         <Footer />
       </ConvexClerkProvider>
     </body>

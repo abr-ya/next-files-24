@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { UserButton } from "@clerk/nextjs";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { LoginLogoutButton } from ".";
 
 const Header = () => (
@@ -14,6 +14,7 @@ const Header = () => (
       {/* Link to My Files List */}
 
       <div className="flex gap-2">
+        <OrganizationSwitcher />
         <UserButton />
         <LoginLogoutButton />
       </div>

@@ -1,14 +1,18 @@
 "use client";
 
 import { useMutation, useQuery } from "convex/react";
-import { useSession } from "@clerk/nextjs";
+import { useOrganization, useSession, useUser } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
 
 const Home = () => {
-  const { isLoaded, session } = useSession(); // isSignedIn
-  console.log(isLoaded, session?.publicUserData);
+  const organization = useOrganization();
+  const user = useUser();
+
+  const ownerId = organization.isLoaded && user.isLoaded ? (organization.organization?.id ?? user.user?.id) : null;
+
+  const { session } = useSession(); // isSignedIn
 
   const renderHello = () => {
     if (!session?.publicUserData) {
@@ -21,10 +25,14 @@ const Home = () => {
   };
 
   const createFileMutation = useMutation(api.files.createFile);
-  const allFiles = useQuery(api.files.getFiles);
+  const allFiles = useQuery(api.files.getFiles, ownerId ? { ownerId } : "skip");
 
   const createFileHandler = () => {
-    createFileMutation({ name: "HelloWorld" });
+    if (!ownerId) {
+      console.log("OwnerId is empty - exit...");
+      return;
+    }
+    createFileMutation({ name: "HelloWorld", ownerId });
   };
 
   return (

@@ -4,24 +4,35 @@ import { mutation, query } from "./_generated/server";
 export const createFile = mutation({
   args: {
     name: v.string(),
-    // todo: fileId, orgId, type
+    ownerId: v.string(),
+    // todo: fileId, ownerId, type
   },
   async handler(ctx, args) {
     // todo: checkAccess
 
     await ctx.db.insert("files", {
       name: args.name,
-      // todo: fileId, orgId, type
+      ownerId: args.ownerId,
+      // todo: fileId, type
       // todo: userId
     });
   },
 });
 
 export const getFiles = query({
-  async handler(ctx) {
+  args: {
+    ownerId: v.string(),
+  },
+  async handler(ctx, args) {
     // todo: check access
+    const hasAccess = true;
 
-    const files = await ctx.db.query("files").collect();
+    if (!hasAccess) return [];
+
+    const files = await ctx.db
+      .query("files")
+      .withIndex("by_ownerId", (q) => q.eq("ownerId", args.ownerId))
+      .collect();
 
     return files;
   },

@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useMutation, useQuery } from "convex/react";
 import { useOrganization, useSession, useUser } from "@clerk/nextjs";
+import { FileIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
@@ -38,6 +40,12 @@ const Home = () => {
   return (
     <>
       <h1 className="text-2xl">{renderHello()}</h1>
+
+      <Link href="/dashboard/files">
+        <Button variant={"link"} className="flex gap-2">
+          <FileIcon /> All Files
+        </Button>
+      </Link>
 
       {allFiles?.map(({ _id: id, name }) => <div key={id}>file: {name}</div>)}
 

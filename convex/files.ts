@@ -36,7 +36,8 @@ export const createFile = mutation({
     await ctx.db.insert("files", {
       name: args.name,
       ownerId: args.ownerId,
-      // todo: fileId, type
+      type: "image",
+      // todo: fileId
       // todo: userId
     });
   },
@@ -47,8 +48,7 @@ export const getFiles = query({
     ownerId: v.string(),
   },
   async handler(ctx, args) {
-    // todo: check access
-    const hasAccess = true;
+    const hasAccess = await hasAccessToOrg(ctx, args.ownerId);
 
     if (!hasAccess) return [];
 

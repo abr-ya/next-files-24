@@ -2,7 +2,7 @@ import { ConvexError, v } from "convex/values";
 import { MutationCtx, QueryCtx, internalMutation, query } from "./_generated/server";
 import { roles } from "./schema";
 
-export async function getUser(ctx: QueryCtx | MutationCtx, tokenIdentifier: string) {
+export const getUser = async (ctx: QueryCtx | MutationCtx, tokenIdentifier: string) => {
   const user = await ctx.db
     .query("users")
     .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", tokenIdentifier))
@@ -13,7 +13,7 @@ export async function getUser(ctx: QueryCtx | MutationCtx, tokenIdentifier: stri
   }
 
   return user;
-}
+};
 
 export const createUser = internalMutation({
   args: { tokenIdentifier: v.string(), name: v.string(), image: v.string() },

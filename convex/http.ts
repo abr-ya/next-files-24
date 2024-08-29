@@ -5,6 +5,8 @@ import { httpAction } from "./_generated/server";
 
 const http = httpRouter();
 
+// todo: url ==> ${process.env.CLERK_HOSTNAME}
+// shining-cattle-95.clerk.accounts.dev
 http.route({
   path: "/clerk",
   method: "POST",
@@ -24,12 +26,32 @@ http.route({
 
       switch (result.type) {
         case "user.created":
-          console.log("user.created hook");
-          console.log(process.env.CLERK_HOSTNAME);
           await ctx.runMutation(internal.users.createUser, {
             tokenIdentifier: `https://shining-cattle-95.clerk.accounts.dev|${result.data.id}`,
             name: `${result.data.first_name ?? ""} ${result.data.last_name ?? ""}`,
             image: result.data.image_url,
+          });
+          break;
+        case "user.updated":
+          await ctx.runMutation(internal.users.updateUser, {
+            tokenIdentifier: `https://shining-cattle-95.clerk.accounts.dev|${result.data.id}`,
+            name: `${result.data.first_name ?? ""} ${result.data.last_name ?? ""}`,
+            image: result.data.image_url,
+          });
+          break;
+        case "organizationMembership.created":
+          await ctx.runMutation(internal.users.addOwnerIdToUser, {
+            tokenIdentifier: `https://shining-cattle-95.clerk.accounts.dev|${result.data.public_user_data.user_id}`,
+            ownerId: result.data.organization.id,
+            role: result.data.role === "org:admin" ? "admin" : "member",
+          });
+          break;
+        case "organizationMembership.updated":
+          console.log(result.data.role);
+          await ctx.runMutation(internal.users.updateRoleInOrgForUser, {
+            tokenIdentifier: `https://shining-cattle-95.clerk.accounts.dev|${result.data.public_user_data.user_id}`,
+            ownerId: result.data.organization.id,
+            role: result.data.role === "org:admin" ? "admin" : "member",
           });
           break;
       }

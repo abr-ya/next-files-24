@@ -1,13 +1,17 @@
 import { useMutation } from "convex/react";
-import { SchemaType } from "../formSchema";
-import UploadModal from "./UploadModal";
+
 import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
 import { useOrganization, useUser } from "@clerk/nextjs";
+import { useToast } from "@/hooks/use-toast";
+
+import UploadModal from "./UploadModal";
+import { SchemaType } from "../formSchema";
 
 const UploadContainer = () => {
   const organization = useOrganization();
   const user = useUser();
+  const { toast } = useToast();
 
   const generateUploadUrl = useMutation(api.files.generateUploadUrl);
   const createFileMutation = useMutation(api.files.createFile);
@@ -56,11 +60,18 @@ const UploadContainer = () => {
         ownerId,
       });
 
-      // todo: message!
       console.log("success!!1");
+      toast({
+        title: "File Uploaded",
+        description: "Now everyone can view your file",
+      });
     } catch (err) {
-      // todo: message!
       console.log("errorrrrrrr!!!");
+      toast({
+        variant: "destructive",
+        title: "Something went wrong",
+        description: "Your file could not be uploaded, try again later",
+      });
     }
   };
 

@@ -4,6 +4,7 @@ import { Roboto } from "next/font/google";
 import "./globals.css";
 import ConvexClerkProvider from "./ConvexClerkProvider";
 import { Footer, Header } from "./_components";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Roboto({ subsets: ["latin"], weight: ["300", "400", "700", "900"] });
 
@@ -19,6 +20,7 @@ const RootLayout = ({ children }: PropsWithChildren) => (
         <Header />
         <main className="flex min-h-[calc(100vh-260px)] flex-col items-center p-4">{children}</main>
         <Footer />
+        <Toaster />
       </ConvexClerkProvider>
     </body>
   </html>

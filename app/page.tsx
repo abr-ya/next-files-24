@@ -5,9 +5,11 @@ import { useSession } from "@clerk/nextjs";
 import { FileIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 const Home = () => {
   const { session } = useSession(); // isSignedIn
+  const { toast } = useToast();
 
   const renderHello = () => {
     if (!session?.publicUserData) {
@@ -19,6 +21,14 @@ const Home = () => {
     return `Hello, ${firstName} ${lastName} == Your Files will be here soon...`;
   };
 
+  const clickHandler = () => {
+    toast({
+      variant: "destructive",
+      title: "Something went wrong",
+      description: "Your file could not be uploaded, try again later",
+    });
+  };
+
   return (
     <>
       <h1 className="text-2xl">{renderHello()}</h1>
@@ -28,6 +38,7 @@ const Home = () => {
           <FileIcon /> All Files
         </Button>
       </Link>
+      <Button onClick={clickHandler}>Toast</Button>
     </>
   );
 };

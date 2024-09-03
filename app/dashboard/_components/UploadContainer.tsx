@@ -2,6 +2,7 @@ import { useMutation } from "convex/react";
 import { SchemaType } from "../formSchema";
 import UploadModal from "./UploadModal";
 import { api } from "@/convex/_generated/api";
+import { Doc } from "@/convex/_generated/dataModel";
 
 const UploadContainer = () => {
   const generateUploadUrl = useMutation(api.files.generateUploadUrl);
@@ -22,11 +23,18 @@ const UploadContainer = () => {
 
     console.log(title, storageId);
 
+    const types = {
+      "image/png": "image",
+      "application/pdf": "pdf",
+      "text/csv": "csv",
+    } as Record<string, Doc<"files">["type"]>;
+
     try {
       await createFileMutation({
         name: title,
-        // fileId: storageId,
-        ownerId: "org_2lJtMxdJK4J4Hl9R3hA8xZwsl2V", // todo: use Really ID!!!
+        fileId: storageId,
+        type: types[loadingFile.type],
+        ownerId: "",
       });
 
       // todo: message!

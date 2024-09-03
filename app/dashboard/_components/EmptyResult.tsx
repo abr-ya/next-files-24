@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import UploadButton from "./UploadButton";
+import UploadButton from "./UploadModal";
 
 const EmptyResult = () => (
   <div className="flex flex-col gap-8 w-full items-center mt-24">

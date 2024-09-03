@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Doc } from "../../../convex/_generated/dataModel";
 import SearchBar from "./SearchBar";
 import TypeSelect from "./TypeSelect";
-import UploadButton from "./UploadButton";
+import UploadButton from "./UploadModal";
 import EmptyResult from "./EmptyResult";
 
 const FileList = ({ title }: { title: string }) => {

@@ -7,15 +7,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { FC, useState } from "react";
 import FileSelectForm from "./FileSelectForm";
 import { SchemaType } from "../formSchema";
 
-const UploadModal = () => {
+interface IUploadModal {
+  submitHandler: (data: SchemaType) => void;
+}
+
+const UploadModal: FC<IUploadModal> = ({ submitHandler }) => {
   const [isFileDialogOpen, setIsFileDialogOpen] = useState(false);
 
-  const submitHandler: (data: SchemaType) => void = (data) => {
-    console.log(data);
+  const onSubmit = (data: SchemaType) => {
+    submitHandler(data);
     setIsFileDialogOpen(false);
   };
 
@@ -31,7 +35,7 @@ const UploadModal = () => {
         </DialogHeader>
 
         <div>
-          <FileSelectForm submitHandler={submitHandler} />
+          <FileSelectForm submitHandler={onSubmit} />
         </div>
       </DialogContent>
     </Dialog>

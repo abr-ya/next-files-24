@@ -8,20 +8,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 import { FC } from "react";
-import { formSchema, SchemaType } from "../formSchema";
+import { defaultValues, formSchema, SchemaType } from "../formSchema";
 
 interface IFileSelectForm {
   submitHandler: (data: SchemaType) => void;
 }
 
 const FileSelectForm: FC<IFileSelectForm> = ({ submitHandler }) => {
-  const formProps = useForm<SchemaType>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      title: "",
-      file: undefined,
-    },
-  });
+  const formProps = useForm<SchemaType>({ resolver: zodResolver(formSchema), defaultValues });
 
   const {
     control,

@@ -9,8 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Doc } from "../../../convex/_generated/dataModel";
 import SearchBar from "./SearchBar";
 import TypeSelect from "./TypeSelect";
-import UploadButton from "./UploadModal";
 import EmptyResult from "./EmptyResult";
+import UploadContainer from "./UploadContainer";
 
 const FileList = ({ title }: { title: string }) => {
   const organization = useOrganization();
@@ -33,7 +33,7 @@ const FileList = ({ title }: { title: string }) => {
 
         <SearchBar query={query} setQuery={setQuery} />
 
-        <UploadButton />
+        <UploadContainer />
       </div>
 
       <Tabs defaultValue="grid">

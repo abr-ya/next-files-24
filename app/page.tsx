@@ -23,7 +23,7 @@ const Home = () => {
 
   const clickHandler = () => {
     toast({
-      variant: "destructive",
+      variant: "success",
       title: "Something went wrong",
       description: "Your file could not be uploaded, try again later",
     });

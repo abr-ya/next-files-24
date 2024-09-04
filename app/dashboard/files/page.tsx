@@ -1,9 +1,5 @@
 import FilesList from "../_components/FilesList";
 
-const FilesPage = () => (
-  <div>
-    <FilesList title="Your Files" />
-  </div>
-);
+const FilesPage = () => <FilesList title="Your Files" />;
 
 export default FilesPage;

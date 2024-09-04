@@ -66,6 +66,13 @@ export const getFiles = query({
       .withIndex("by_ownerId", (q) => q.eq("ownerId", args.ownerId))
       .collect();
 
-    return files;
+    const filesWithUrl = await Promise.all(
+      files.map(async (file) => ({
+        ...file,
+        url: await ctx.storage.getUrl(file.fileId),
+      })),
+    );
+
+    return filesWithUrl;
   },
 });

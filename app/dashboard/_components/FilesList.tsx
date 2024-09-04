@@ -11,6 +11,7 @@ import SearchBar from "./SearchBar";
 import TypeSelect from "./TypeSelect";
 import EmptyResult from "./EmptyResult";
 import UploadContainer from "./UploadContainer";
+import FileCard from "./FileCard";
 
 const FileList = ({ title }: { title: string }) => {
   const organization = useOrganization();
@@ -60,12 +61,7 @@ const FileList = ({ title }: { title: string }) => {
         )}
 
         <TabsContent value="grid">
-          <div className="grid grid-cols-3 gap-4">
-            {files?.map((file) => {
-              // todo: fileCard
-              return <p key={file._id}>{file._id} </p>;
-            })}
-          </div>
+          <div className="grid grid-cols-3 gap-4">{files?.map((file) => <FileCard file={file} hasLike={false} />)}</div>
         </TabsContent>
         <TabsContent value="table">
           <h2>todo: table for FilesData</h2>

@@ -18,7 +18,7 @@ const Home = () => {
 
     const { firstName, lastName } = session.publicUserData;
 
-    return `Hello, ${firstName} ${lastName} == Your Files will be here soon...`;
+    return `Hello, ${firstName} ${lastName} == You can control your files here:`;
   };
 
   const clickHandler = () => {
@@ -38,6 +38,7 @@ const Home = () => {
           <FileIcon /> All Files
         </Button>
       </Link>
+      <h2 className="text-xl my-3">test Toast:</h2>
       <Button onClick={clickHandler}>Toast</Button>
     </>
   );

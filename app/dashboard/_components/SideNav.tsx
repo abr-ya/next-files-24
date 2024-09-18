@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import clsx from "clsx";
-import { FileIcon } from "lucide-react";
+import { FileIcon, StarIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -11,7 +11,6 @@ const SideNav = () => {
 
   return (
     <div className="w-40 flex flex-col gap-4">
-      <h2>Navigation ...</h2>
       <Link href="/dashboard/files">
         <Button
           variant={"link"}
@@ -23,9 +22,27 @@ const SideNav = () => {
         </Button>
       </Link>
 
-      {/* todo: favourites */}
+      <Link href="/dashboard/favorites">
+        <Button
+          variant={"link"}
+          className={clsx("flex gap-2", {
+            "text-blue-500": pathname.includes("/dashboard/favorites"),
+          })}
+        >
+          <StarIcon /> Favorites
+        </Button>
+      </Link>
 
-      {/* todo: trash */}
+      <Link href="/dashboard/trash">
+        <Button
+          variant={"link"}
+          className={clsx("flex gap-2", {
+            "text-blue-500": pathname.includes("/dashboard/trash"),
+          })}
+        >
+          <TrashIcon /> Trash
+        </Button>
+      </Link>
     </div>
   );
 };

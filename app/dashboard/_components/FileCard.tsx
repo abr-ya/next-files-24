@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Doc } from "@/convex/_generated/dataModel";
 import { FileTextIcon, GanttChartIcon, ImageIcon } from "lucide-react";
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import FileCardMenu from "./FileCardMenu";
 
 const typeIcons = {
@@ -32,7 +32,7 @@ const FileCard: FC<IFileCard> = ({ file }) => (
       {file.type === "csv" && <GanttChartIcon className="w-20 h-20" />}
       {file.type === "pdf" && <FileTextIcon className="w-20 h-20" />}
     </CardContent>
-    <CardFooter className="flex justify-between">CardFooter</CardFooter>
+    {/* <CardFooter className="flex justify-between">CardFooter</CardFooter> */}
   </Card>
 );
 

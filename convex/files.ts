@@ -55,16 +55,21 @@ export const createFile = mutation({
 export const getFiles = query({
   args: {
     ownerId: v.string(),
+    query: v.optional(v.string()),
   },
   async handler(ctx, args) {
     const hasAccess = await hasAccessToOrg(ctx, args.ownerId);
 
     if (!hasAccess) return [];
 
-    const files = await ctx.db
+    let files = await ctx.db
       .query("files")
       .withIndex("by_ownerId", (q) => q.eq("ownerId", args.ownerId))
       .collect();
+
+    if (args.query) {
+      files = files.filter((file) => file.name.toLowerCase().includes((args.query as string).toLowerCase()));
+    }
 
     const filesWithUrl = await Promise.all(
       files.map(async (file) => ({

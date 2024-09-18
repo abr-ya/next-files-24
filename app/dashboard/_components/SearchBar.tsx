@@ -19,9 +19,10 @@ interface ISearchBar {
   setQuery: Dispatch<SetStateAction<string>>;
 }
 
-const SearchBar: FC<ISearchBar> = ({ query }) => {
-  const submitHandler = (data: SearchSchemaType) => {
-    console.log(data);
+const SearchBar: FC<ISearchBar> = ({ query, setQuery }) => {
+  const submitHandler = ({ query }: SearchSchemaType) => {
+    console.log("search", query);
+    setQuery(query);
   };
 
   const formProps = useForm<z.infer<typeof formSchema>>({

@@ -24,16 +24,14 @@ const FileList = ({ title }: { title: string }) => {
     ownerId = organization.organization?.id ?? user.user?.id;
   }
 
-  const files = useQuery(api.files.getFiles, ownerId ? { ownerId } : "skip");
+  const files = useQuery(api.files.getFiles, ownerId ? { ownerId, query } : "skip");
   const isLoading = files === undefined;
 
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-4xl font-bold">{title}</h1>
-
         <SearchBar query={query} setQuery={setQuery} />
-
         <UploadContainer />
       </div>
 
@@ -69,7 +67,7 @@ const FileList = ({ title }: { title: string }) => {
         </TabsContent>
       </Tabs>
 
-      {files?.length === 0 ? <EmptyResult /> : null}
+      {files?.length === 0 ? <EmptyResult filter={query} /> : null}
     </div>
   );
 };

@@ -1,7 +1,5 @@
-"use client";
+import FilesList from "../_components/FilesList";
 
-const FavoritesPage = () => {
-  return <div>FavoritesPage</div>;
-};
+const FavoritesPage = () => <FilesList title="Favorites" onlyLiked />;
 
 export default FavoritesPage;

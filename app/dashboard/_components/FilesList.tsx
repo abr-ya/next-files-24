@@ -4,7 +4,7 @@ import { useOrganization, useUser } from "@clerk/nextjs";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { GridIcon, Loader2, RowsIcon } from "lucide-react";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Doc } from "../../../convex/_generated/dataModel";
 import SearchBar from "./SearchBar";
@@ -13,7 +13,12 @@ import EmptyResult from "./EmptyResult";
 import UploadContainer from "./UploadContainer";
 import FileCard from "./FileCard";
 
-const FileList = ({ title }: { title: string }) => {
+interface IFileList {
+  title: string;
+  onlyLiked?: boolean;
+}
+
+const FileList: FC<IFileList> = ({ title }) => {
   const organization = useOrganization();
   const user = useUser();
   const [query, setQuery] = useState("");
@@ -59,7 +64,9 @@ const FileList = ({ title }: { title: string }) => {
         )}
 
         <TabsContent value="grid">
-          <div className="grid grid-cols-3 gap-4">{files?.map((file) => <FileCard file={file} hasLike={false} />)}</div>
+          <div className="grid grid-cols-3 gap-4">
+            {files?.map((file) => <FileCard file={file} hasLike={false} key={file._id} />)}
+          </div>
         </TabsContent>
         <TabsContent value="table">
           <h2>todo: table for FilesData</h2>

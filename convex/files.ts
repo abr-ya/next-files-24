@@ -1,6 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import { mutation, MutationCtx, query, QueryCtx } from "./_generated/server";
 import { fileTypes } from "./schema";
+import { Id } from "./_generated/dataModel";
 
 export async function hasAccessToOrg(ctx: QueryCtx | MutationCtx, ownerId: string) {
   const identity = await ctx.auth.getUserIdentity();
@@ -19,6 +20,16 @@ export async function hasAccessToOrg(ctx: QueryCtx | MutationCtx, ownerId: strin
   if (!hasAccess) return null;
 
   return { user };
+}
+
+async function hasAccessToFile(ctx: QueryCtx | MutationCtx, fileId: Id<"files">) {
+  const file = await ctx.db.get(fileId);
+  if (!file) return null;
+
+  const hasAccess = await hasAccessToOrg(ctx, file.ownerId);
+  if (!hasAccess) return null;
+
+  return { user: hasAccess.user, file };
 }
 
 export const generateUploadUrl = mutation(async (ctx) => {
@@ -79,5 +90,33 @@ export const getFiles = query({
     );
 
     return filesWithUrl;
+  },
+});
+
+export const toggleFavorite = mutation({
+  args: { fileId: v.id("files") },
+  async handler(ctx, args) {
+    const access = await hasAccessToFile(ctx, args.fileId);
+
+    if (!access) {
+      throw new ConvexError("no access to file");
+    }
+
+    const favorite = await ctx.db
+      .query("favorites")
+      .withIndex("by_userId_ownerId_fileId", (q) =>
+        q.eq("userId", access.user._id).eq("ownerId", access.file.ownerId).eq("fileId", access.file._id),
+      )
+      .first();
+
+    if (!favorite) {
+      await ctx.db.insert("favorites", {
+        fileId: access.file._id,
+        userId: access.user._id,
+        ownerId: access.file.ownerId,
+      });
+    } else {
+      await ctx.db.delete(favorite._id);
+    }
   },
 });

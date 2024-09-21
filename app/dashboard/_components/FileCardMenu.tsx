@@ -5,7 +5,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { FileIcon, MoreVertical, TrashIcon } from "lucide-react";
+import { FileIcon, MoreVertical, StarHalf, StarIcon, TrashIcon } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,13 +17,19 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { FC, useState } from "react";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 
 interface IFileCardMenu {
-  id: string;
+  id: Id<"files">;
   url: string | null;
+  hasLike: boolean;
 }
 
-const FileCardMenu: FC<IFileCardMenu> = ({ id, url }) => {
+const FileCardMenu: FC<IFileCardMenu> = ({ hasLike, id, url }) => {
+  const toggleFavoriteMutation = useMutation(api.files.toggleFavorite);
+
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   // todo: async to show toast after delete?
@@ -35,6 +41,11 @@ const FileCardMenu: FC<IFileCardMenu> = ({ id, url }) => {
   const loadHandler = () => {
     console.log("Load ", url);
     if (url) window.open(url, "_blank");
+  };
+
+  const toggleFavorite = () => {
+    console.log("toggleFavorite");
+    toggleFavoriteMutation({ fileId: id });
   };
 
   return (
@@ -61,6 +72,20 @@ const FileCardMenu: FC<IFileCardMenu> = ({ id, url }) => {
         <DropdownMenuContent>
           <DropdownMenuItem onClick={loadHandler} className="flex gap-1 items-center cursor-pointer">
             <FileIcon className="w-4 h-4" /> Open New Tab
+          </DropdownMenuItem>
+
+          <DropdownMenuItem onClick={toggleFavorite} className="flex gap-1 items-center cursor-pointer">
+            <div className="flex gap-1 items-center">
+              {hasLike ? (
+                <>
+                  <StarIcon className="w-4 h-4" /> Unfavorite
+                </>
+              ) : (
+                <>
+                  <StarHalf className="w-4 h-4" /> Favorite
+                </>
+              )}
+            </div>
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />

@@ -5,6 +5,11 @@ export const roles = v.union(v.literal("admin"), v.literal("member"));
 export const fileTypes = v.union(v.literal("image"), v.literal("csv"), v.literal("pdf"), v.literal("txt"));
 
 export default defineSchema({
+  favorites: defineTable({
+    fileId: v.id("files"),
+    ownerId: v.string(),
+    userId: v.id("users"),
+  }).index("by_userId_ownerId_fileId", ["userId", "ownerId", "fileId"]),
   files: defineTable({
     name: v.string(),
     ownerId: v.string(),

@@ -38,9 +38,10 @@ const UploadContainer = () => {
     });
     const { storageId } = await result.json();
 
-    console.log(title, storageId);
+    console.log(title, storageId, loadingFile.type);
 
     const types = {
+      "application/zip": "zip",
       "image/png": "image",
       "image/jpeg": "image",
       "application/pdf": "pdf",

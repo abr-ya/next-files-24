@@ -42,6 +42,7 @@ const UploadContainer = () => {
 
     const types = {
       "application/zip": "zip",
+      "application/x-zip-compressed": "zip",
       "image/png": "image",
       "image/jpeg": "image",
       "application/pdf": "pdf",

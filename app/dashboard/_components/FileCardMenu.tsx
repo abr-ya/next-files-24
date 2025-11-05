@@ -29,13 +29,15 @@ interface IFileCardMenu {
 
 const FileCardMenu: FC<IFileCardMenu> = ({ hasLike, id, url }) => {
   const toggleFavoriteMutation = useMutation(api.files.toggleFavorite);
+  const markForDeletionMutation = useMutation(api.files.markForDelete);
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   // todo: async to show toast after delete?
   const deleteHandler = () => {
     console.log("Delete file...", id);
-    // todo: delete and toast
+    markForDeletionMutation({ fileId: id });
+    // todo: show toast
   };
 
   const loadHandler = () => {

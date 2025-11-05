@@ -1,7 +1,7 @@
 import { ConvexError, v } from "convex/values";
-import { mutation, MutationCtx, query, QueryCtx } from "./_generated/server";
+import { internalMutation, mutation, MutationCtx, query, QueryCtx } from "./_generated/server";
 import { fileTypes } from "./schema";
-import { Id } from "./_generated/dataModel";
+import { Doc, Id } from "./_generated/dataModel";
 
 export async function hasAccessToOrg(ctx: QueryCtx | MutationCtx, ownerId: string) {
   const identity = await ctx.auth.getUserIdentity();
@@ -30,6 +30,15 @@ async function hasAccessToFile(ctx: QueryCtx | MutationCtx, fileId: Id<"files">)
   if (!hasAccess) return null;
 
   return { user: hasAccess.user, file };
+}
+
+function canDeleteFile(user: Doc<"users">, file: Doc<"files">) {
+  const canDelete =
+    file.userId === user._id || user.ownerIds.find((org) => org.ownerId === file.ownerId)?.role === "admin";
+
+  if (!canDelete) {
+    throw new ConvexError("you have no access to delete this file");
+  }
 }
 
 export const generateUploadUrl = mutation(async (ctx) => {
@@ -152,10 +161,30 @@ export const markForDelete = mutation({
       throw new ConvexError("no access to file");
     }
 
-    // todo: check is it file owner or admin
+    canDeleteFile(access.user, access.file);
 
     await ctx.db.patch(args.fileId, {
       shouldDelete: true,
     });
+  },
+});
+
+// for Cron Job
+export const deleteAllFiles = internalMutation({
+  args: {},
+  async handler(ctx) {
+    const files = await ctx.db
+      .query("files")
+      .withIndex("by_shouldDelete", (q) => q.eq("shouldDelete", true))
+      .collect();
+
+    await Promise.all(
+      files.map(async (file, index) => {
+        if (index === 0) await ctx.storage.delete(file.fileId); // todo: for all after tests!
+        // await ctx.storage.delete(file.fileId);
+
+        return await ctx.db.delete(file._id);
+      }),
+    );
   },
 });

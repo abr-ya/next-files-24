@@ -179,9 +179,8 @@ export const deleteAllFiles = internalMutation({
       .collect();
 
     await Promise.all(
-      files.map(async (file, index) => {
-        if (index === 0) await ctx.storage.delete(file.fileId); // todo: for all after tests!
-        // await ctx.storage.delete(file.fileId);
+      files.map(async (file) => {
+        await ctx.storage.delete(file.fileId);
 
         return await ctx.db.delete(file._id);
       }),

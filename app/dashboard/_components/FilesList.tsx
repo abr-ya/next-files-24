@@ -15,10 +15,13 @@ import FileCard from "./FileCard";
 
 interface IFileList {
   title: string;
+  onlyDeleted?: boolean;
   onlyLiked?: boolean;
 }
 
-const FileList: FC<IFileList> = ({ title }) => {
+const FileList: FC<IFileList> = ({ title, onlyDeleted, onlyLiked }) => {
+  console.log(onlyDeleted, onlyLiked);
+
   const organization = useOrganization();
   const user = useUser();
   const [query, setQuery] = useState("");
@@ -29,7 +32,10 @@ const FileList: FC<IFileList> = ({ title }) => {
     ownerId = organization.organization?.id ?? user.user?.id;
   }
 
-  const files = useQuery(api.files.getFiles, ownerId ? { ownerId, query } : "skip");
+  const files = useQuery(
+    api.files.getFiles,
+    ownerId ? { ownerId, query, favorites: onlyLiked, deleted: onlyDeleted } : "skip",
+  );
   const isLoading = files === undefined;
 
   return (

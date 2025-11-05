@@ -67,6 +67,9 @@ export const getFiles = query({
   args: {
     ownerId: v.string(),
     query: v.optional(v.string()),
+    favorites: v.optional(v.boolean()),
+    deleted: v.optional(v.boolean()),
+    type: v.optional(fileTypes),
   },
   async handler(ctx, args) {
     const hasAccess = await hasAccessToOrg(ctx, args.ownerId);
@@ -80,6 +83,25 @@ export const getFiles = query({
 
     if (args.query) {
       files = files.filter((file) => file.name.toLowerCase().includes((args.query as string).toLowerCase()));
+    }
+
+    if (args.favorites) {
+      const favorites = await ctx.db
+        .query("favorites")
+        .withIndex("by_userId_ownerId_fileId", (q) => q.eq("userId", hasAccess.user._id).eq("ownerId", args.ownerId))
+        .collect();
+
+      files = files.filter((file) => favorites.some((favorite) => favorite.fileId === file._id));
+    }
+
+    if (args.deleted) {
+      files = files.filter((file) => file.shouldDelete);
+    } else {
+      files = files.filter((file) => !file.shouldDelete);
+    }
+
+    if (args.type) {
+      files = files.filter((file) => file.type === args.type);
     }
 
     const filesWithUrl = await Promise.all(
@@ -118,5 +140,22 @@ export const toggleFavorite = mutation({
     } else {
       await ctx.db.delete(favorite._id);
     }
+  },
+});
+
+export const markForDelete = mutation({
+  args: { fileId: v.id("files") },
+  async handler(ctx, args) {
+    const access = await hasAccessToFile(ctx, args.fileId);
+
+    if (!access) {
+      throw new ConvexError("no access to file");
+    }
+
+    // todo: check is it file owner or admin
+
+    await ctx.db.patch(args.fileId, {
+      shouldDelete: true,
+    });
   },
 });

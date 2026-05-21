@@ -12,6 +12,7 @@ import TypeSelect from "./TypeSelect";
 import EmptyResult from "./EmptyResult";
 import UploadContainer from "./UploadContainer";
 import FileCard from "./FileCard";
+import FilesTable from "./FilesTable";
 
 interface IFileList {
   title: string;
@@ -75,8 +76,7 @@ const FileList: FC<IFileList> = ({ title, onlyDeleted, onlyLiked }) => {
           </div>
         </TabsContent>
         <TabsContent value="table">
-          <h2>todo: table for FilesData</h2>
-          {/* todo: table for FilesData */}
+          <FilesTable files={files ?? []} />
         </TabsContent>
       </Tabs>
 

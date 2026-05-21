@@ -94,6 +94,7 @@ public/                   Static assets
 - Clerk sign-in/sign-out and organization support
 - Convex-backed file upload flow
 - File listing with search support
+- Grid and table display modes
 - Favorites support
 - Soft delete / trash support
 - Periodic permanent deletion via Convex internal mutation
@@ -102,9 +103,7 @@ public/                   Static assets
 
 - `TypeSelect` is still a placeholder.
 - File type state exists in the UI but is not yet wired into the list query.
-- Table view in the dashboard is still TODO.
 - Some debug `console.log` calls remain.
-- File cards currently preview images, CSV, and PDF files; schema also supports TXT and ZIP.
 - Favorites data exists, but cards currently receive a static `hasLike={false}` value.
 
 ## Notes

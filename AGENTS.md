@@ -76,9 +76,8 @@ Access flow:
 ## Known Current Work Areas
 
 - `TypeSelect.tsx` is a stub, and `FilesList.tsx` keeps `type` state but does not pass it to `api.files.getFiles`.
-- Table view in `FilesList.tsx` is still TODO.
+- `FilesTable.tsx` provides the dashboard table view using a lightweight Tailwind table.
 - Several debug `console.log` calls remain in dashboard components and `convex/http.ts`.
-- `FileCard.tsx` has icons/previews for `image`, `csv`, and `pdf`, but schema also allows `txt` and `zip`.
 - Upload MIME mapping includes zip/image/pdf/csv, but not plain text.
 - Delete flow marks files with `shouldDelete`; permanent deletion is handled by `deleteAllFiles` internal mutation for cron.
 - Favorites query support exists in Convex, but the UI currently passes `hasLike={false}` to every `FileCard`.
